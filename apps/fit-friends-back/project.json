@@ -1,0 +1,74 @@
+{
+  "name": "fit-friends-back",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/fit-friends-back/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/fit-friends-back",
+        "main": "apps/fit-friends-back/src/main.ts",
+        "tsConfig": "apps/fit-friends-back/tsconfig.app.json",
+        "assets": [
+          "apps/fit-friends-back/src/assets"
+        ],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/fit-friends-back/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "fit-friends-back:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "fit-friends-back:build:development"
+        },
+        "production": {
+          "buildTarget": "fit-friends-back:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/fit-friends-back/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/fit-friends-back/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
