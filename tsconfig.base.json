@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@fit-friends/configs/config-uploader": ["libs/configs/config-uploader/src/index.ts"],
       "@fit-friends/models/back-models": ["libs/models/back-models/src/index.ts"]
     }
   },
