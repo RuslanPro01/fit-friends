@@ -16,4 +16,4 @@ const ENV_FILE_PATH = 'apps/fit-friends-back/env/.uploader.env';
   controllers: [],
   providers: [],
 })
-export class UploaderModule {}
+export class ConfigUploaderModule {}

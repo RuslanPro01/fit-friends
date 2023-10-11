@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UploaderModule } from '@fit-friends/configs/config-uploader';
+import { UploaderModule } from './uploader/uploader.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [UploaderModule],
+  imports: [UploaderModule, PrismaModule],
   controllers: [],
   providers: [],
 })
