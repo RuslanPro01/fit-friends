@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@fit-friends/configs/config-uploader": ["libs/configs/config-uploader/src/index.ts"],
+      "@fit-friends/models/back-models": ["libs/models/back-models/src/index.ts"],
+      "@fit-friends/shared/app-types": ["libs/shared/app-types/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

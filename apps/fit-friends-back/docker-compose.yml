@@ -1,0 +1,52 @@
+version: '3.5'
+name: fit-friends
+services:
+  postgres:
+    image: postgres:14-alpine
+    env_file:
+      - env/.postgresql.env
+    volumes:
+      - fit.friends.data:/var/lib/postgresql/data
+    networks:
+      - fit.friends.network
+    ports:
+      - '5432:5432'
+
+    healthcheck:
+      test: pg_isready -h localhost -p 5432
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - env/.pgadmin.env
+    networks:
+      - fit.friends.network
+    depends_on:
+      - postgres
+    ports:
+      - '5050:80'
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    env_file:
+      - env/.rabbitmq.env
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  fit.friends.data:
+
+networks:
+  fit.friends.network:
+    driver: bridge
