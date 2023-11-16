@@ -83,6 +83,9 @@ model User {
   trainerMerits      String?    @db.VarChar(140)
   personalTraining   Boolean?
   Training           Training[]
+  Review             Review[]
+
+  @@map("users")
 }
 
 enum TrainingType {
@@ -117,6 +120,20 @@ model Training {
   trainer         User             @relation(fields: [trainerId], references: [id])
   trainerId       Int
   isSpecialOffer  Boolean          @default(false)
+  Review          Review[]
 
   @@map("trainings")
+}
+
+model Review {
+  id         Int       @id @default(autoincrement())
+  author     User      @relation(fields: [authorId], references: [id])
+  authorId   Int       @map("author_id")
+  training   Training  @relation(fields: [trainingId], references: [id])
+  trainingId Int       @map("training_id")
+  rating     Int       @db.IntRange(1, 5)
+  text       String    @db.VarChar(1024)
+  createdAt  DateTime? @default(now()) @map("created_at")
+
+  @@map("reviews")
 }
