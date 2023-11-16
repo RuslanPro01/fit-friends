@@ -12,7 +12,7 @@ export class UploaderController {
   @Post('/')
   @UseInterceptors(FileInterceptor('file'))
   public async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<File> {
-    return this.uploaderService.uploadFile(file);
+    return this.uploaderService.saveFile(file);
   }
 
   @Get('/:fileId')

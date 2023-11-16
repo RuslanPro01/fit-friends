@@ -16,7 +16,7 @@ export class UploaderService {
     private readonly uploaderRepository: UploaderRepository
   ) {}
 
-  public async uploadFile(file: Express.Multer.File): Promise<File> {
+  private async uploadFile(file: Express.Multer.File): Promise<File> {
     const uploadDir = this.uploaderConf.uploadDir;
 
     const [year, month] = dayjs().format('YYYY-MM').split('-');
@@ -43,7 +43,7 @@ export class UploaderService {
   public async saveFile(file: Express.Multer.File) {
     const writtenFile = await this.uploadFile(file);
     const newFile = new FileEntity(writtenFile);
-    await this.uploaderRepository.create(newFile);
+    return this.uploaderRepository.create(newFile);
   }
 
   public async showFile(id: string) {
