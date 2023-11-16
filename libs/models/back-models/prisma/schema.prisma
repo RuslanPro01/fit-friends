@@ -82,10 +82,11 @@ model User {
   trainerCertificate   String?
   trainerMerits        String?                   @db.VarChar(140)
   personalTraining     Boolean?
-  Training             Training[]
-  Review               Review[]
+  training             Training[]
+  review               Review[]
   initiatedRequests    PersonalTrainingRequest[] @relation("RequestInitiator")
   participatedRequests PersonalTrainingRequest[] @relation("RequestParticipant")
+  notification         Notification[]
 
   @@map("users")
 }
@@ -122,8 +123,8 @@ model Training {
   trainer         User             @relation(fields: [trainerId], references: [id])
   trainerId       Int
   isSpecialOffer  Boolean          @default(false)
-  Review          Review[]
-  Order           Order[]
+  review          Review[]
+  order           Order[]
 
   @@map("trainings")
 }
@@ -181,4 +182,14 @@ model PersonalTrainingRequest {
   status          RequestStatus
 
   @@map("personal_training_requests")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("notification_date")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  text      String   @db.VarChar(140)
+
+  @@map("notifications")
 }
