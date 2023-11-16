@@ -121,6 +121,7 @@ model Training {
   trainerId       Int
   isSpecialOffer  Boolean          @default(false)
   Review          Review[]
+  Order           Order[]
 
   @@map("trainings")
 }
@@ -131,9 +132,32 @@ model Review {
   authorId   Int       @map("author_id")
   training   Training  @relation(fields: [trainingId], references: [id])
   trainingId Int       @map("training_id")
-  rating     Int       @db.IntRange(1, 5)
+  rating     Int
   text       String    @db.VarChar(1024)
   createdAt  DateTime? @default(now()) @map("created_at")
 
   @@map("reviews")
+}
+
+enum PurchaseType {
+  SUBSCRIPTION @map("абонемент")
+}
+
+enum PaymentMethod {
+  VISA   @map("visa")
+  MIR    @map("mir")
+  UMONEY @map("umoney")
+}
+
+model Order {
+  id            Int           @id @default(autoincrement())
+  purchaseType  PurchaseType
+  service       Training      @relation(fields: [serviceId], references: [id])
+  serviceId     Int
+  trainingPrice Int           @map("training_price")
+  totalPrice    Int           @map("total_price")
+  paymentMethod PaymentMethod
+  createdAt     DateTime      @default(now())
+
+  @@map("orders")
 }
