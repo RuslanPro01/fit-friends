@@ -23,3 +23,100 @@ model File {
 
   @@map("files")
 }
+
+enum Gender {
+  FEMALE @map("Женский")
+  MALE   @map("Мужской")
+  NONE   @map("Неважно")
+}
+
+enum Role {
+  USER    @map("Пользователь")
+  TRAINER @map("Тренер")
+}
+
+enum Location {
+  PIONERSKAYA    @map("Пионерская")
+  PETROGRADSKAYA @map("Петроградская")
+  UDELNAYA       @map("Удельная")
+  ZVEZDNYA       @map("Звёздная")
+  SPORTRIVNAYA   @map("Спортивная")
+}
+
+enum FitnessLevel {
+  NEWBIE     @map("новичок")
+  AMATEUR    @map("любитель")
+  PROFESSION @map("профессионал")
+}
+
+enum TrainingDuration {
+  THIRTY_MINUTES  @map("10-30 мин")
+  FIFTY_MINUTES   @map("30-50 мин")
+  EIGHTY_MINUTES  @map("50-80 мин")
+  HUNDRED_MINUTES @map("80-100 мин")
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(15)
+  email           String    @unique
+  avatar          String?
+  password        String
+  gender          Gender
+  birthDate       DateTime? @map("birth_date")
+  role            Role
+  description     String?   @db.VarChar(140)
+  location        Location
+  backgroundImage String?   @map("background_image")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Пользователь
+  fitnessLevel             FitnessLevel      @map("fitness_level")
+  trainingTypes            String[]          @map("training_types")
+  trainingDuration         TrainingDuration?
+  caloriesToBurn           Int?
+  dailyCaloriesConsumption Int?
+  readyForTraining         Boolean?
+
+  // Тренер
+  trainerCertificate String?
+  trainerMerits      String?    @db.VarChar(140)
+  personalTraining   Boolean?
+  Training           Training[]
+}
+
+enum TrainingType {
+  YOGA       @map("йога")
+  RUNNING    @map("бег")
+  BOXING     @map("бокс")
+  STRETCHING @map("стрейчинг")
+  CROSSFIT   @map("кроссфит")
+  AEROBICS   @map("аэробика")
+  PILATES    @map("пилатес")
+}
+
+enum TrainingGender {
+  FEMALE @map("для женщин")
+  MALE   @map("для мужчин")
+  ANY    @map("для всех")
+}
+
+model Training {
+  id              Int              @id @default(autoincrement())
+  name            String           @db.VarChar(15)
+  backgroundImage String           @map("background_image")
+  level           FitnessLevel
+  type            TrainingType
+  duration        TrainingDuration
+  price           Int
+  calories        Int
+  description     String           @db.VarChar(140)
+  genderTarget    TrainingGender   @map("gender_target")
+  videoUrl        String
+  rating          Int              @default(0)
+  trainer         User             @relation(fields: [trainerId], references: [id])
+  trainerId       Int
+  isSpecialOffer  Boolean          @default(false)
+
+  @@map("trainings")
+}
