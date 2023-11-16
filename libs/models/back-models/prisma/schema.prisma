@@ -79,11 +79,13 @@ model User {
   readyForTraining         Boolean?
 
   // Тренер
-  trainerCertificate String?
-  trainerMerits      String?    @db.VarChar(140)
-  personalTraining   Boolean?
-  Training           Training[]
-  Review             Review[]
+  trainerCertificate   String?
+  trainerMerits        String?                   @db.VarChar(140)
+  personalTraining     Boolean?
+  Training             Training[]
+  Review               Review[]
+  initiatedRequests    PersonalTrainingRequest[] @relation("RequestInitiator")
+  participatedRequests PersonalTrainingRequest[] @relation("RequestParticipant")
 
   @@map("users")
 }
@@ -160,4 +162,23 @@ model Order {
   createdAt     DateTime      @default(now())
 
   @@map("orders")
+}
+
+enum RequestStatus {
+  PENDING  @map("на рассмотрении")
+  REJECTED @map("отклонён")
+  ACCEPTED @map("принят")
+}
+
+model PersonalTrainingRequest {
+  id              Int           @id @default(autoincrement())
+  initiator       User          @relation(name: "RequestInitiator", fields: [initiatorId], references: [id])
+  initiatorId     Int
+  participant     User          @relation(name: "RequestParticipant", fields: [participantId], references: [id])
+  participantId   Int
+  createdAt       DateTime      @default(now())
+  statusUpdatedAt DateTime?     @map("status_updated_at")
+  status          RequestStatus
+
+  @@map("personal_training_requests")
 }
